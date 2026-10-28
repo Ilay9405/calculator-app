@@ -8,28 +8,30 @@ pipeline {
             }
         }
 
-        stage('Build & Test') {
+        stage('Test') {
             steps {
-                sh 'mvn clean test'
+                sh 'mvn clean test' // Running tests
             }
             post {
+                always {
+                    junit '**/target/surefire-reports/*.xml' // Saving test results
+                }
                 success {
-                    echo 'Calculator tests passed successfully! '
+                    echo 'Calculator tests passed successfully!'
                 }
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Docker Build') {
             steps {
-                // This specific phrasing is used so the image is available locally in Docker daemon.
                 sh "docker buildx build --load -t calculator-app:${env.BUILD_NUMBER} ."
             }
         }
     }
-    
+
     post {
         always {
-            cleanWs() //Workspace cleanup after execution.
+            cleanWs()
         }
     }
 }
