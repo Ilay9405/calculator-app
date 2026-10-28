@@ -27,6 +27,15 @@ pipeline {
                 sh "docker buildx build --load -t calculator-app:${env.BUILD_NUMBER} ."
             }
         }
+        stage('Docker Push') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') { // pushing to docker hub while hiding credentials from Git by using an environemnt variable
+                        sh "docker push your-dockerhub-username/calculator-app:${env.BUILD_NUMBER}"
+                    }
+                }
+            }
+        }
     }
 
     post {
