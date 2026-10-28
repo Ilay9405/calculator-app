@@ -1,0 +1,6 @@
+com\calculator\Calculator.class
+com\calculator\operations\Div.class
+com\calculator\Operation.class
+com\calculator\operations\Mul.class
+com\calculator\operations\Sub.class
+com\calculator\operations\Add.class

@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                sh 'mvn clean test'
+            }
+            post {
+                success {
+                    echo 'Calculator tests passed successfully! '
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                // This specific phrasing is used so the image is available locally in Docker daemon.
+                sh "docker buildx build --load -t calculator-app:${env.BUILD_NUMBER} ."
+            }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs() //Workspace cleanup after execution.
+        }
+    }
+}
