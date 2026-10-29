@@ -30,7 +30,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                bat "docker buildx build --load -t ${env.DOCKER_USER}/calculator-app:${env.BUILD_NUMBER} ." // non generic "latest" tags, alternative to using HASH as seen in the other project.
+                bat "docker buildx build --load -t ${env.DOCKER_USER}/calculator-app:${env.BUILD_NUMBER} ." // unique tags, alternative to using HASH as seen in the other project.
             }
         }
 
