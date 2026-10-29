@@ -5,7 +5,7 @@ pipeline {
         DOCKER_USER = "ilayoh"
     }
     tools {
-        maven 'Maven 3.8.7'
+        maven 'Maven'
     }
 
 
