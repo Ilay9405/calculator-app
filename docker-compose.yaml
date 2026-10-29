@@ -1,4 +1,3 @@
-version: '3.8'
 services:
 
   jenkins:
@@ -6,11 +5,17 @@ services:
     container_name: jenkins
     restart: unless-stopped
     ports:
-      - "8099:8080"
+      - "8090:8080"
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
-      - //var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
     user: root
+
+  calculator:
+    build: .
+    image: calculator-app:latest
+    restart: "no"
+
 volumes:
   jenkins_home:
