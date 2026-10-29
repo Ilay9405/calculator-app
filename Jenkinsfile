@@ -4,9 +4,7 @@ pipeline {
     environment {
         DOCKER_USER = "ilayoh"
     }
-    tools {
-        maven 'Maven'
-    }
+
 
 
     stages {
