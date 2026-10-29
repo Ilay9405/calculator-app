@@ -3,13 +3,9 @@ pipeline {
 
     environment {
         DOCKER_USER = "ilayoh"
+        JAVA_HOME   = "C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.5.8-hotspot"
+        PATH        = "C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.5.8-hotspot\\bin;${env.PATH}"
     }
-    // tools {
-    //     maven 'Maven 3.8.7'
-    //     jdk 'Eclipse Temurin JDK 21'
-
-    // }
-
 
     stages {
         stage('Checkout') {
@@ -24,7 +20,7 @@ pipeline {
             }
             post {
                 always {
-                    junit '**/target/surefire-reports/*.xml' // Saving test results
+                    junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml' // Saving test results
                 }
                 success {
                     echo 'Calculator tests passed successfully!'
@@ -34,14 +30,14 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                bat "docker buildx build --load -t ${env.DOCKER_USER}/calculator-app:${env.BUILD_NUMBER} ." // non generic "latest" tags
+                bat "docker buildx build --load -t ${env.DOCKER_USER}/calculator-app:${env.BUILD_NUMBER} ." // non generic "latest" tags, alternative to using HASH as seen in the other project.
             }
         }
-        
-        stage('Docker push') {
+
+        stage('Docker Push') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') { // pushing to docker hub while hiding credentials from Git by using an environemnt variable
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
                         bat "docker push ${env.DOCKER_USER}/calculator-app:${env.BUILD_NUMBER}" 
                     }
                 }
